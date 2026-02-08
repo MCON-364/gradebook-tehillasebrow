@@ -1,7 +1,6 @@
 package edu.course.gradebook;
 
 import java.util.*;
-import java.util.logging.Logger;
 
 public class Gradebook {
 
@@ -88,14 +87,36 @@ int firstNum= (int) avrg/10;
     }
 
     public Optional<Double> classAverage() {
-        throw new UnsupportedOperationException();
+       double totalSum=0;
+       int ctr=0;
+        for(List<Integer> value: gradesByStudent.values()){
+            for(Integer grades:value){
+                totalSum+=grades;
+                ctr++;
+            }
+       }
+        if (totalSum == 0)return Optional.empty();
+        return Optional.of(totalSum/ctr);
     }
 
     public boolean undo() {
-        throw new UnsupportedOperationException();
+      if(undoStack.isEmpty())
+          return false;
+        UndoAction task= undoStack.pop();
+        task.undo(this);//this i used chatgpt since i didnt know what was wrong with just doing task.undo(); i didnt know you needed a 'this'
+
+      activityLog.add("undid the task:"+task);
+return true;
     }
 
     public List<String> recentLog(int maxItems) {
-        throw new UnsupportedOperationException();
+        Iterator<String> iterator=activityLog.descendingIterator();
+        List<String> list= new Stack<>();
+        int ctr=0;
+        while (iterator.hasNext() && ctr < maxItems){
+        list.add(iterator.next());
+        ctr++;
+        }
+        return list;
     }
 }
