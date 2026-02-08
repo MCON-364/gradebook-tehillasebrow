@@ -33,7 +33,7 @@ public class Gradebook {
         activityLog.push("added " + name + "'s grade: " + grade);
 
         UndoAction undoAction = (gradebook) -> {
-            gradesByStudent.get(name).remove(Integer.valueOf(grade));
+            gradebook.gradesByStudent.get(name).remove(Integer.valueOf(grade));
         };
         undoStack.push(undoAction);
         return true;
@@ -43,9 +43,10 @@ public class Gradebook {
         var gradesOpt = findStudentGrades(name);
         if (gradesOpt.isEmpty())
             return false;
+        List<Integer> oldGrades = new ArrayList<>(gradesOpt.get());
         gradesByStudent.remove(name);
         UndoAction undoAction = (gradebook) -> {
-            gradesByStudent.put(name, new ArrayList<Integer>());
+           gradebook.gradesByStudent.put(name, oldGrades);
         };
         undoStack.push(undoAction);
         activityLog.add("Removed " + name + " from the Gradebook.");
@@ -105,13 +106,13 @@ int firstNum= (int) avrg/10;
         UndoAction task= undoStack.pop();
         task.undo(this);//this i used chatgpt since i didnt know what was wrong with just doing task.undo(); i didnt know you needed a 'this'
 
-      activityLog.add("undid the task:"+task);
+      activityLog.add("undid the task:"+task.toString());
 return true;
     }
 
     public List<String> recentLog(int maxItems) {
         Iterator<String> iterator=activityLog.descendingIterator();
-        List<String> list= new Stack<>();
+        List<String> list= new ArrayList<>();
         int ctr=0;
         while (iterator.hasNext() && ctr < maxItems){
         list.add(iterator.next());
