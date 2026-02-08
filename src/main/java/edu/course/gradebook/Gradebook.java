@@ -106,7 +106,7 @@ int firstNum= (int) avrg/10;
         UndoAction task= undoStack.pop();
         task.undo(this);//this i used chatgpt since i didnt know what was wrong with just doing task.undo(); i didnt know you needed a 'this'
 
-      activityLog.add("undid the task:"+task.toString());
+      activityLog.add("undo previous task");
 return true;
     }
 
